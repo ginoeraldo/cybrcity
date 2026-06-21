@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cybrcity</title>
+<style>
+  :root{
+    --bg:#ffffff;
+    --panel:#f4f4f6;
+    --panel-2:#e9e9ec;
+    --ink:#0E0F13;
+    --ink-soft:#6b6f7b;
+    --accent:#2C4BD4;
+    --accent-soft: rgba(44,75,212,0.08);
+    --line: rgba(14,15,19,0.10);
+    --shadow: 0 20px 60px rgba(44,75,212,0.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    overflow-x:hidden;
+    padding-top:72px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; /* used only for non-visible accessibility text */
+  }
+  .site-header{
+    position:fixed;
+    top:0; left:0; right:0;
+    height:72px;
+    z-index:100;
+    background:#0E0F13;
+    display:flex;
+    align-items:center;
+    padding:0 32px;
+  }
+  .site-header .header-mark{
+    color:#fff;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+  }
+  .lang-switch{
+    position:relative;
+    margin-left:auto;
+  }
+  .lang-current{
+    background:none;
+    border:none;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    cursor:pointer;
+    padding:6px 2px;
+  }
+  .lang-current .lang-code{
+    color:#fff;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.1em;
+  }
+  .lang-options{
+    position:absolute;
+    top:100%; right:0;
+    margin-top:12px;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 16px 40px rgba(14,15,19,0.14);
+    padding:6px;
+    min-width:96px;
+    display:flex;
+    flex-direction:column;
+    gap:1px;
+    opacity:0;
+    transform:translateY(-8px) scale(0.97);
+    transform-origin:top right;
+    pointer-events:none;
+    transition:opacity 0.2s ease, transform 0.2s ease;
+  }
+  .lang-switch.open .lang-options{
+    opacity:1;
+    transform:translateY(0) scale(1);
+    pointer-events:auto;
+  }
+  .lang-options button{
+    background:none;
+    border:none;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    color:var(--ink-soft);
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    cursor:pointer;
+    padding:9px 10px;
+    border-radius:9px;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .lang-options button:hover{ background:var(--panel); color:var(--ink); }
+  .lang-options button.active{ color:var(--ink); background:var(--panel); }
+  section{
+    position:relative;
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 6vw;
+  }
+
+  /* ---------- shared reveal animation ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity 1.1s cubic-bezier(.2,.8,.2,1), transform 1.1s cubic-bezier(.2,.8,.2,1);
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* ================= HERO ================= */
+  #hero{
+    background:var(--bg);
+    align-items:flex-start;
+    padding-top:14vh;
+  }
+  .hero-content{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .wordmark{
+    font-size:clamp(1.4rem, 3vw, 2rem);
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+    margin-bottom:32px;
+    text-align:center;
+    max-width:560px;
+    line-height:1.35;
+  }
+  .subtext{
+    font-size:clamp(0.95rem, 1.6vw, 1.1rem);
+    font-weight:400;
+    letter-spacing:0;
+    color:var(--ink-soft);
+    margin-bottom:96px;
+    text-align:center;
+    max-width:480px;
+    line-height:1.55;
+  }
+
+  .mark{
+    position:relative;
+    width:220px;height:220px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .mark svg{ width:100%; height:100%; }
+  .pl{
+    stroke:var(--accent);
+    stroke-width:1.5;
+    stroke-linecap:round;
+    fill:none;
+    stroke-dasharray:14 86;
+    opacity:0;
+    filter:blur(0.5px);
+    animation:linepulse 5.2s ease-in-out infinite;
+  }
+  .pl1{ animation-delay:2.6s; }
+  .pl2{ animation-delay:0s; }
+  .pl3{ animation-delay:3.4s; }
+  .pl4{ animation-delay:0.8s; }
+  .pl5{ animation-delay:4.2s; }
+  .pl6{ animation-delay:1.6s; }
+  @keyframes linepulse{
+    0%{ stroke-dashoffset:100; opacity:0; }
+    15%{ opacity:0.75; }
+    85%{ opacity:0.75; }
+    100%{ stroke-dashoffset:0; opacity:0; }
+  }
+  .dot{
+    fill:#0E0F13;
+  }
+  .ripple{
+    fill:none;
+    stroke:var(--accent);
+    stroke-width:2;
+    opacity:0;
+    transform-box:fill-box;
+    transform-origin:center;
+    animation:ripple 5.2s ease-out infinite;
+  }
+  .ripple1{ animation-delay:2.6s; }
+  .ripple2{ animation-delay:0s; }
+  .ripple3{ animation-delay:3.4s; }
+  .ripple4{ animation-delay:0.8s; }
+  .ripple5{ animation-delay:4.2s; }
+  .ripple6{ animation-delay:1.6s; }
+  @keyframes ripple{
+    0%{ transform:scale(1); opacity:0.55; }
+    100%{ transform:scale(2.6); opacity:0; }
+  }
+  .orbit-icons{
+    position:absolute;
+    top:110px; left:50%;
+    width:300px; height:300px;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+  }
+  .orbit-icons-spin{
+    position:absolute; inset:0;
+    animation:orbitspin 65s linear infinite;
+  }
+  @keyframes orbitspin{ to{ transform:rotate(360deg); } }
+  .mini-node{
+    position:absolute;
+    width:32px;height:32px;
+    border-radius:10px;
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:0 8px 22px rgba(14,15,19,0.08);
+    transform:translate(-50%,-50%);
+    overflow:hidden;
+  }
+  .mini-node-inner{
+    width:100%; height:100%;
+    display:flex;align-items:center;justify-content:center;
+    animation:orbitcounterspin 65s linear infinite;
+  }
+  @keyframes orbitcounterspin{ to{ transform:rotate(-360deg); } }
+  .mini-node svg{ width:15px;height:15px; stroke:var(--ink); fill:none; }
+
+  .mn1{ top:6.7%;  left:50%; }
+  .mn2{ top:28.3%; left:87.5%; }
+  .mn3{ top:71.7%; left:87.5%; }
+  .mn4{ top:93.3%; left:50%; }
+  .mn5{ top:71.7%; left:12.5%; }
+  .mn6{ top:28.3%; left:12.5%; }
+
+  /* ================= FOOTER ================= */
+  footer{
+    padding:56px 6vw 40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    background:var(--bg);
+    border-top:1px solid var(--line);
+  }
+  .footer-logo{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  .footer-links{
+    display:flex;
+    gap:28px;
+  }
+  .footer-links a{
+    font-size:13px;
+    color:var(--ink-soft);
+    text-decoration:none;
+  }
+  .footer-links a:hover{ color:var(--ink); }
+  .footer-copy{
+    font-size:12px;
+    color:var(--ink-soft);
+    opacity:0.7;
+  }
+
+  .sr-only{
+    position:absolute;
+    width:1px;height:1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-mark">Cybrcity</div>
+  <div class="lang-switch" id="langSwitch">
+    <button type="button" class="lang-current" id="langCurrent">
+      <span class="lang-code">EN</span>
+    </button>
+    <div class="lang-options">
+      <button type="button" data-lang="en" class="active">EN</button>
+      <button type="button" data-lang="nl">NL</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <h1 class="wordmark reveal visible" id="i18n-wordmark">The digital backbone of the physical world.</h1>
+    <p class="subtext reveal visible" id="i18n-subtext">Connect assets, managers, service providers and suppliers through a unified digital infrastructure.</p>
+    <div class="mark reveal visible">
+      <svg viewBox="0 0 220 220">
+        <g class="base-lines">
+          <line x1="110" y1="40" x2="110" y2="110" stroke="rgba(14,15,19,0.07)"></line>
+          <line x1="48" y1="78" x2="172" y2="148" stroke="rgba(14,15,19,0.07)"></line>
+          <line x1="172" y1="78" x2="48" y2="148" stroke="rgba(14,15,19,0.07)"></line>
+          <line x1="110" y1="110" x2="110" y2="186" stroke="rgba(14,15,19,0.07)"></line>
+        </g>
+        <g class="pulse-lines">
+          <line class="pl pl1" x1="110" y1="40" x2="110" y2="110" pathLength="100"></line>
+          <line class="pl pl2" x1="172" y1="78" x2="110" y2="110" pathLength="100"></line>
+          <line class="pl pl3" x1="172" y1="148" x2="110" y2="110" pathLength="100"></line>
+          <line class="pl pl5" x1="48" y1="148" x2="110" y2="110" pathLength="100"></line>
+          <line class="pl pl6" x1="48" y1="78" x2="110" y2="110" pathLength="100"></line>
+          <line class="pl pl4" x1="110" y1="186" x2="110" y2="110" pathLength="100"></line>
+        </g>
+        <g class="ripples">
+          <circle class="ripple ripple1" cx="110" cy="40" r="6"></circle>
+          <circle class="ripple ripple2" cx="172" cy="78" r="6"></circle>
+          <circle class="ripple ripple3" cx="172" cy="148" r="6"></circle>
+          <circle class="ripple ripple5" cx="48" cy="148" r="6"></circle>
+          <circle class="ripple ripple6" cx="48" cy="78" r="6"></circle>
+          <circle class="ripple ripple4" cx="110" cy="186" r="6"></circle>
+        </g>
+        <g>
+          <circle class="dot dot1" cx="110" cy="40" r="6"></circle>
+          <circle class="dot dot2" cx="172" cy="78" r="6"></circle>
+          <circle class="dot dot3" cx="172" cy="148" r="6"></circle>
+          <circle class="dot dot5" cx="48" cy="148" r="6"></circle>
+          <circle class="dot dot6" cx="48" cy="78" r="6"></circle>
+          <circle class="dot dot4" cx="110" cy="186" r="6"></circle>
+        </g>
+        <circle cx="110" cy="110" r="22" fill="#0E0F13"></circle>
+        <polygon points="110,103 116.1,106.5 116.1,113.5 110,117 103.9,113.5 103.9,106.5" fill="#fff" opacity="0.9"></polygon>
+      </svg>
+      <div class="orbit-icons">
+        <div class="orbit-icons-spin">
+          <!-- property / building -->
+          <div class="mini-node mn1">
+            <div class="mini-node-inner">
+              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="3" width="12" height="18"></rect>
+                <line x1="9" y1="7" x2="9" y2="7"></line>
+                <line x1="15" y1="7" x2="15" y2="7"></line>
+                <line x1="9" y1="11" x2="9" y2="11"></line>
+                <line x1="15" y1="11" x2="15" y2="11"></line>
+                <line x1="9" y1="15" x2="9" y2="15"></line>
+                <line x1="15" y1="15" x2="15" y2="15"></line>
+              </svg>
+            </div>
+          </div>
+          <!-- maintenance / wrench -->
+          <div class="mini-node mn2">
+            <div class="mini-node-inner">
+              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="6.5" cy="6.5" r="2.6"></circle>
+                <circle cx="17.5" cy="17.5" r="2.6"></circle>
+                <line x1="8.3" y1="8.3" x2="15.7" y2="15.7"></line>
+              </svg>
+            </div>
+          </div>
+          <!-- inspection / clipboard-check -->
+          <div class="mini-node mn3">
+            <div class="mini-node-inner">
+              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="4" width="12" height="16" rx="1.5"></rect>
+                <rect x="9" y="2.4" width="6" height="3" rx="1"></rect>
+                <path d="M9 12.5l2 2 4-4.5"></path>
+              </svg>
+            </div>
+          </div>
+          <!-- access / key -->
+          <div class="mini-node mn4">
+            <div class="mini-node-inner">
+              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="7.5" cy="12" r="3.5"></circle>
+                <line x1="11" y1="12" x2="20" y2="12"></line>
+                <line x1="16.5" y1="12" x2="16.5" y2="15"></line>
+                <line x1="19" y1="12" x2="19" y2="15"></line>
+              </svg>
+            </div>
+          </div>
+          <!-- scheduled maintenance / calendar -->
+          <div class="mini-node mn5">
+            <div class="mini-node-inner">
+              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="5" width="16" height="15" rx="1.5"></rect>
+                <line x1="4" y1="9.5" x2="20" y2="9.5"></line>
+                <line x1="8" y1="3" x2="8" y2="7"></line>
+                <line x1="16" y1="3" x2="16" y2="7"></line>
+              </svg>
+            </div>
+          </div>
+          <!-- compliance / shield-check -->
+          <div class="mini-node mn6">
+            <div class="mini-node-inner">
+              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"></path>
+                <path d="M9 12l2.2 2.2L15.5 9.5"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Cybrcity</div>
+  <div class="footer-copy" id="i18n-copy">© 2026 Cybrcity. All rights reserved.</div>
+</footer>
+
+<script>
+  const translations = {
+    en: {
+      wordmark: "The digital backbone of the physical world.",
+      subtext: "Connect assets, managers, service providers and suppliers through a unified digital infrastructure.",
+      cta: "Sign up",
+      copy: "© 2026 Cybrcity. All rights reserved."
+    },
+    nl: {
+      wordmark: "Het digitale fundament van de fysieke wereld.",
+      subtext: "Verbind assets, beheerders, dienstverleners en leveranciers via één centrale digitale infrastructuur.",
+      cta: "Aanmelden",
+      copy: "© 2026 Cybrcity. Alle rechten voorbehouden."
+    }
+  };
+  const langSwitch = document.getElementById('langSwitch');
+  const langCurrentCode = document.querySelector('#langCurrent .lang-code');
+
+  function setLang(lang){
+    const t = translations[lang];
+    if(!t) return;
+    document.getElementById('i18n-wordmark').textContent = t.wordmark;
+    document.getElementById('i18n-subtext').textContent = t.subtext;
+    document.getElementById('i18n-copy').textContent = t.copy;
+    document.querySelectorAll('.lang-options button').forEach(b=>{
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+    langCurrentCode.textContent = lang.toUpperCase();
+    document.documentElement.lang = lang;
+  }
+
+  document.getElementById('langCurrent').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    langSwitch.classList.toggle('open');
+  });
+  document.querySelectorAll('.lang-options button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      setLang(b.dataset.lang);
+      langSwitch.classList.remove('open');
+    });
+  });
+  document.addEventListener('click', (e)=>{
+    if(!langSwitch.contains(e.target)){ langSwitch.classList.remove('open'); }
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('visible'); }
+    });
+  }, { threshold:0.25 });
+  reveals.forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
