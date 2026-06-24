@@ -9,6 +9,9 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="shortcut icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#ffffff;
@@ -41,7 +44,7 @@
   }
   .site-header .header-mark{
     color:#fff;
-    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-family:'Chakra Petch', sans-serif;
     font-size:15px;
     font-weight:700;
     letter-spacing:0.22em;
@@ -52,20 +55,37 @@
     margin-left:auto;
   }
   .lang-current{
-    background:none;
-    border:none;
+    background:#0E0F13;
+    border:1px solid rgba(255,255,255,0.7);
+    border-radius:8px;
     display:flex;
     align-items:center;
-    gap:9px;
+    gap:7px;
     cursor:pointer;
-    padding:6px 2px;
+    padding:6px 12px 6px 14px;
+    transition:border-color 0.15s ease;
+  }
+  .lang-current:hover{
+    border-color:#fff;
   }
   .lang-current .lang-code{
     color:#fff;
-    font-family:'Helvetica Neue', Arial, sans-serif;
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:0.1em;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:11px;
+    font-weight:400;
+    letter-spacing:0.18em;
+  }
+  .lang-current .lang-chevron{
+    width:12px;height:12px;
+    stroke:#fff;
+    fill:none;
+    stroke-width:2.2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transition:transform 0.2s ease;
+  }
+  .lang-switch.open .lang-current .lang-chevron{
+    transform:rotate(180deg);
   }
   .lang-options{
     position:absolute;
@@ -97,10 +117,10 @@
     align-items:center;
     gap:9px;
     color:var(--ink-soft);
-    font-family:'Helvetica Neue', Arial, sans-serif;
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:0.08em;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:11px;
+    font-weight:400;
+    letter-spacing:0.14em;
     cursor:pointer;
     padding:9px 10px;
     border-radius:9px;
@@ -131,9 +151,22 @@
 
   /* ================= HERO ================= */
   #hero{
-    background:var(--bg);
-    align-items:flex-start;
-    padding-top:14vh;
+    min-height:100vh;
+    padding:0;
+    background:#0E0F13;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;
+    inset:0;
+    background-image:url('hero-bg.jpg');
+    background-size:cover;
+    background-position:center 30%;
+    filter:brightness(0.42);
   }
   .hero-content{
     position:relative;
@@ -141,114 +174,28 @@
     display:flex;
     flex-direction:column;
     align-items:center;
+    padding:0 6vw;
   }
   .wordmark{
-    font-size:clamp(1.4rem, 3vw, 2rem);
+    font-size:clamp(1.6rem, 3.5vw, 2.6rem);
     font-weight:600;
     letter-spacing:-0.01em;
-    color:var(--ink);
-    margin-bottom:32px;
+    color:#ffffff;
+    margin-bottom:28px;
     text-align:center;
-    max-width:560px;
-    line-height:1.35;
+    max-width:640px;
+    line-height:1.25;
   }
   .subtext{
-    font-size:clamp(0.95rem, 1.6vw, 1.1rem);
+    font-size:clamp(0.95rem, 1.6vw, 1.15rem);
     font-weight:400;
     letter-spacing:0;
-    color:var(--ink-soft);
-    margin-bottom:96px;
+    color:rgba(255,255,255,0.65);
+    margin-bottom:0;
     text-align:center;
     max-width:480px;
-    line-height:1.55;
+    line-height:1.6;
   }
-
-  .mark{
-    position:relative;
-    width:220px;height:220px;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .mark svg{ width:100%; height:100%; }
-  .pl{
-    stroke:var(--accent);
-    stroke-width:1.5;
-    stroke-linecap:round;
-    fill:none;
-    stroke-dasharray:14 86;
-    opacity:0;
-    filter:blur(0.5px);
-    animation:linepulse 5.2s ease-in-out infinite;
-  }
-  .pl1{ animation-delay:2.6s; }
-  .pl2{ animation-delay:0s; }
-  .pl3{ animation-delay:3.4s; }
-  .pl4{ animation-delay:0.8s; }
-  .pl5{ animation-delay:4.2s; }
-  .pl6{ animation-delay:1.6s; }
-  @keyframes linepulse{
-    0%{ stroke-dashoffset:100; opacity:0; }
-    15%{ opacity:0.75; }
-    85%{ opacity:0.75; }
-    100%{ stroke-dashoffset:0; opacity:0; }
-  }
-  .dot{
-    fill:#0E0F13;
-  }
-  .ripple{
-    fill:none;
-    stroke:var(--accent);
-    stroke-width:2;
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:center;
-    animation:ripple 5.2s ease-out infinite;
-  }
-  .ripple1{ animation-delay:2.6s; }
-  .ripple2{ animation-delay:0s; }
-  .ripple3{ animation-delay:3.4s; }
-  .ripple4{ animation-delay:0.8s; }
-  .ripple5{ animation-delay:4.2s; }
-  .ripple6{ animation-delay:1.6s; }
-  @keyframes ripple{
-    0%{ transform:scale(1); opacity:0.55; }
-    100%{ transform:scale(2.6); opacity:0; }
-  }
-  .orbit-icons{
-    position:absolute;
-    top:110px; left:50%;
-    width:300px; height:300px;
-    transform:translate(-50%,-50%);
-    pointer-events:none;
-  }
-  .orbit-icons-spin{
-    position:absolute; inset:0;
-    animation:orbitspin 65s linear infinite;
-  }
-  @keyframes orbitspin{ to{ transform:rotate(360deg); } }
-  .mini-node{
-    position:absolute;
-    width:32px;height:32px;
-    border-radius:10px;
-    background:#fff;
-    border:1px solid var(--line);
-    box-shadow:0 8px 22px rgba(14,15,19,0.08);
-    transform:translate(-50%,-50%);
-    overflow:hidden;
-  }
-  .mini-node-inner{
-    width:100%; height:100%;
-    display:flex;align-items:center;justify-content:center;
-    animation:orbitcounterspin 65s linear infinite;
-  }
-  @keyframes orbitcounterspin{ to{ transform:rotate(-360deg); } }
-  .mini-node svg{ width:15px;height:15px; stroke:var(--ink); fill:none; }
-
-  .mn1{ top:6.7%;  left:50%; }
-  .mn2{ top:28.3%; left:87.5%; }
-  .mn3{ top:71.7%; left:87.5%; }
-  .mn4{ top:93.3%; left:50%; }
-  .mn5{ top:71.7%; left:12.5%; }
-  .mn6{ top:28.3%; left:12.5%; }
 
   /* ================= FOOTER ================= */
   footer{
@@ -301,6 +248,7 @@
   <div class="lang-switch" id="langSwitch">
     <button type="button" class="lang-current" id="langCurrent">
       <span class="lang-code">EN</span>
+      <svg class="lang-chevron" viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>
     </button>
     <div class="lang-options">
       <button type="button" data-lang="en" class="active">EN</button>
@@ -311,116 +259,13 @@
 
 <!-- HERO -->
 <section id="hero">
+  <div class="hero-bg"></div>
   <div class="hero-content">
     <h1 class="wordmark reveal visible" id="i18n-wordmark">The digital backbone of the physical world.</h1>
     <p class="subtext reveal visible" id="i18n-subtext">Connect assets, managers, service providers and suppliers through a unified digital infrastructure.</p>
-    <div class="mark reveal visible">
-      <svg viewBox="0 0 220 220">
-        <g class="base-lines">
-          <line x1="110" y1="40" x2="110" y2="110" stroke="rgba(14,15,19,0.07)"></line>
-          <line x1="48" y1="78" x2="172" y2="148" stroke="rgba(14,15,19,0.07)"></line>
-          <line x1="172" y1="78" x2="48" y2="148" stroke="rgba(14,15,19,0.07)"></line>
-          <line x1="110" y1="110" x2="110" y2="186" stroke="rgba(14,15,19,0.07)"></line>
-        </g>
-        <g class="pulse-lines">
-          <line class="pl pl1" x1="110" y1="40" x2="110" y2="110" pathLength="100"></line>
-          <line class="pl pl2" x1="172" y1="78" x2="110" y2="110" pathLength="100"></line>
-          <line class="pl pl3" x1="172" y1="148" x2="110" y2="110" pathLength="100"></line>
-          <line class="pl pl5" x1="48" y1="148" x2="110" y2="110" pathLength="100"></line>
-          <line class="pl pl6" x1="48" y1="78" x2="110" y2="110" pathLength="100"></line>
-          <line class="pl pl4" x1="110" y1="186" x2="110" y2="110" pathLength="100"></line>
-        </g>
-        <g class="ripples">
-          <circle class="ripple ripple1" cx="110" cy="40" r="6"></circle>
-          <circle class="ripple ripple2" cx="172" cy="78" r="6"></circle>
-          <circle class="ripple ripple3" cx="172" cy="148" r="6"></circle>
-          <circle class="ripple ripple5" cx="48" cy="148" r="6"></circle>
-          <circle class="ripple ripple6" cx="48" cy="78" r="6"></circle>
-          <circle class="ripple ripple4" cx="110" cy="186" r="6"></circle>
-        </g>
-        <g>
-          <circle class="dot dot1" cx="110" cy="40" r="6"></circle>
-          <circle class="dot dot2" cx="172" cy="78" r="6"></circle>
-          <circle class="dot dot3" cx="172" cy="148" r="6"></circle>
-          <circle class="dot dot5" cx="48" cy="148" r="6"></circle>
-          <circle class="dot dot6" cx="48" cy="78" r="6"></circle>
-          <circle class="dot dot4" cx="110" cy="186" r="6"></circle>
-        </g>
-        <circle cx="110" cy="110" r="22" fill="#0E0F13"></circle>
-        <polygon points="110,103 116.1,106.5 116.1,113.5 110,117 103.9,113.5 103.9,106.5" fill="#fff" opacity="0.9"></polygon>
-      </svg>
-      <div class="orbit-icons">
-        <div class="orbit-icons-spin">
-          <!-- property / building -->
-          <div class="mini-node mn1">
-            <div class="mini-node-inner">
-              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="6" y="3" width="12" height="18"></rect>
-                <line x1="9" y1="7" x2="9" y2="7"></line>
-                <line x1="15" y1="7" x2="15" y2="7"></line>
-                <line x1="9" y1="11" x2="9" y2="11"></line>
-                <line x1="15" y1="11" x2="15" y2="11"></line>
-                <line x1="9" y1="15" x2="9" y2="15"></line>
-                <line x1="15" y1="15" x2="15" y2="15"></line>
-              </svg>
-            </div>
-          </div>
-          <!-- maintenance / wrench -->
-          <div class="mini-node mn2">
-            <div class="mini-node-inner">
-              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="6.5" cy="6.5" r="2.6"></circle>
-                <circle cx="17.5" cy="17.5" r="2.6"></circle>
-                <line x1="8.3" y1="8.3" x2="15.7" y2="15.7"></line>
-              </svg>
-            </div>
-          </div>
-          <!-- inspection / clipboard-check -->
-          <div class="mini-node mn3">
-            <div class="mini-node-inner">
-              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="6" y="4" width="12" height="16" rx="1.5"></rect>
-                <rect x="9" y="2.4" width="6" height="3" rx="1"></rect>
-                <path d="M9 12.5l2 2 4-4.5"></path>
-              </svg>
-            </div>
-          </div>
-          <!-- access / key -->
-          <div class="mini-node mn4">
-            <div class="mini-node-inner">
-              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="7.5" cy="12" r="3.5"></circle>
-                <line x1="11" y1="12" x2="20" y2="12"></line>
-                <line x1="16.5" y1="12" x2="16.5" y2="15"></line>
-                <line x1="19" y1="12" x2="19" y2="15"></line>
-              </svg>
-            </div>
-          </div>
-          <!-- scheduled maintenance / calendar -->
-          <div class="mini-node mn5">
-            <div class="mini-node-inner">
-              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="5" width="16" height="15" rx="1.5"></rect>
-                <line x1="4" y1="9.5" x2="20" y2="9.5"></line>
-                <line x1="8" y1="3" x2="8" y2="7"></line>
-                <line x1="16" y1="3" x2="16" y2="7"></line>
-              </svg>
-            </div>
-          </div>
-          <!-- compliance / shield-check -->
-          <div class="mini-node mn6">
-            <div class="mini-node-inner">
-              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"></path>
-                <path d="M9 12l2.2 2.2L15.5 9.5"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
+
 
 <footer>
   <div class="footer-logo">Cybrcity</div>
